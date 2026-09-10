@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Editor PRO</title>
+
+<!-- Fabric.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+/* =========================================================
+   1. ROOT
+========================================================= */
+
+:root {
+    --bg: #080b12;
+    --panel: #111722;
+    --panel2: #171e2b;
+    --border: #263143;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --primary: #38bdf8;
+    --primary2: #0284c7;
+    --pro1: #a855f7;
+    --pro2: #ec4899;
+    --danger: #ef4444;
+    --success: #22c55e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    overflow: hidden;
+}
+
+/* =========================================================
+   2. HEADER
+========================================================= */
+
+.header {
+    height: 64px;
+    background: rgba(17, 23, 34, .95);
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.logo-icon {
+    color: var(--primary);
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-btn {
+    height: 38px;
+    padding: 0 12px;
+
+    background: var(--panel2);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.header-btn:hover {
+    border-color: var(--primary);
+}
+
+.pro-btn {
+    background: linear-gradient(
+        135deg,
+        var(--pro1),
+        var(--pro2)
+    );
+
+    border: none;
+    font-weight: 800;
+}
+
+/* =========================================================
+   3. APP
+========================================================= */
+
+.app {
+    height: calc(100vh - 64px);
+    display: flex;
+}
+
+/* =========================================================
+   4. TOOLBAR
+========================================================= */
+
+.toolbar {
+    width: 76px;
+
+    background: #0c111b;
+    border-left: 1px solid var(--border);
+
+    padding: 10px 8px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    overflow-y: auto;
+}
+
+.tool {
+    min-height: 58px;
+
+    background: transparent;
+    border: 1px solid transparent;
+
+    color: var(--muted);
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    font-size: 10px;
+}
+
+.tool svg {
+    width: 20px;
+    height: 20px;
+}
+
+.tool:hover,
+.tool.active {
+    background: var(--panel2);
+    color: var(--primary);
+    border-color: var(--border);
+}
+
+/* =========================================================
+   5. WORKSPACE
+========================================================= */
+
+.workspace {
+    flex: 1;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #182235 0,
+            #080b12 65%
+        );
+}
+
+.canvas-area {
+    position: relative;
+
+    max-width: 90%;
+    max-height: 90%;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.5);
+
+    border: 1px solid #253044;
+}
+
+.canvas-area canvas {
+    display: block;
+}
+
+/* Empty state */
+
+.empty {
+    position: absolute;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    pointer-events: none;
+}
+
+.empty svg {
+    width: 70px;
+    height: 70px;
+
+    margin-bottom: 15px;
+
+    color: #334155;
+}
+
+.empty h2 {
+    color: var(--text);
+    margin-bottom: 7px;
+}
+
+/* =========================================================
+   6. RIGHT PANEL
+========================================================= */
+
+.panel {
+    width: 310px;
+
+    background: var(--panel);
+
+    border-right: 1px solid var(--border);
+
+    padding: 18px;
+
+    overflow-y: auto;
+}
+
+.panel-section {
+    display: none;
+}
+
+.panel-section.active {
+    display: block;
+}
+
+.panel-title {
+    font-size: 17px;
+    font-weight: 800;
+
+    margin-bottom: 17px;
+}
+
+.control {
+    margin-bottom: 17px;
+}
+
+.control label {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.value {
+    color: var(--primary);
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
+}
+
+select,
+input[type="text"],
+input[type="number"],
+input[type="color"] {
+    width: 100%;
+
+    height: 40px;
+
+    background: #0b111c;
+    color: white;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    padding: 0 10px;
+}
+
+input[type="color"] {
+    padding: 3px;
+}
+
+.action {
+    width: 100%;
+
+    min-height: 42px;
+
+    background: var(--panel2);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    margin-bottom: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.action:hover {
+    border-color: var(--primary);
+}
+
+.action.primary {
+    background: var(--primary2);
+    border-color: var(--primary2);
+}
+
+.action.danger {
+    color: #fecaca;
+}
+
+.action.pro {
+    border-color: var(--pro1);
+}
+
+/* =========================================================
+   7. QUICK ACTIONS
+========================================================= */
+
+.quick {
+    position: absolute;
+
+    bottom: 18px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: rgba(17,23,34,.94);
+
+    border: 1px solid var(--border);
+
+    padding: 7px;
+
+    border-radius: 10px;
+
+    display: flex;
+    gap: 5px;
+
+    backdrop-filter: blur(12px);
+}
+
+.quick button {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--muted);
+
+    cursor: pointer;
+}
+
+.quick button:hover {
+    background: var(--panel2);
+    color: var(--primary);
+}
+
+/* =========================================================
+   8. MODAL
+========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,0,0,.78);
+
+    z-index: 9999;
+
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: min(650px, 95vw);
+
+    background: #111722;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.close {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+
+    cursor: pointer;
+}
+
+.pricing {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+
+    margin: 20px 0;
+}
+
+.price-card {
+    padding: 22px;
+
+    background: #0b111c;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    cursor: pointer;
+}
+
+.price-card.selected {
+    border-color: var(--pro1);
+
+    box-shadow:
+        0 0 25px rgba(168,85,247,.15);
+}
+
+.price-card h3 {
+    margin-bottom: 8px;
+}
+
+.price {
+    font-size: 30px;
+
+    font-weight: 900;
+
+    margin: 10px 0;
+
+    color: var(--primary);
+}
+
+.features {
+    color: var(--muted);
+
+    line-height: 2;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   9. RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .panel {
+        width: 250px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .header {
+        padding: 0 10px;
+    }
+
+    .header-btn span {
+        display: none;
+    }
+
+    .toolbar {
+        width: 62px;
+    }
+
+    .panel {
+        position: fixed;
+
+        right: 0;
+        bottom: 0;
+
+        width: 100%;
+
+        height: 43vh;
+
+        z-index: 50;
+    }
+
+    .workspace {
+        width: 100%;
+    }
+
+    .canvas-area {
+        max-width: 92%;
+        max-height: 48%;
+    }
+
+    .quick {
+        bottom: calc(43vh + 10px);
+    }
+
+    .pricing {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<header class="header">
+
+    <div class="logo">
+        <i data-lucide="image" class="logo-icon"></i>
+
+        <div>
+            Image <span>Editor</span>
+        </div>
+    </div>
+
+    <div class="header-actions">
+
+        <button class="header-btn" onclick="newProject()">
+            <i data-lucide="file-plus"></i>
+            <span>مشروع جديد</span>
+        </button>
+
+        <button class="header-btn" onclick="document.getElementById('file').click()">
+            <i data-lucide="upload"></i>
+            <span>رفع صورة</span>
+        </button>
+
+        <button class="header-btn pro-btn" onclick="openPro()">
+            <i data-lucide="zap"></i>
+            <span>PRO</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="app">
+
+<!-- =======================================================
+     LEFT TOOLBAR
+======================================================= -->
+
+<nav class="toolbar">
+
+    <button class="tool active"
+            onclick="showPanel('adjust', this)">
+        <i data-lucide="sliders-horizontal"></i>
+        تعديل
+    </button>
+
+    <button class="tool"
+            onclick="showPanel('transform', this)">
+        <i data-lucide="crop"></i>
+        تحويل
+    </button>
+
+    <button class="tool"
+            onclick="showPanel('text', this)">
+        <i data-lucide="type"></i>
+        نص
+    </button>
+
+    <button class="tool"
+            onclick="showPanel('draw', this)">
+        <i data-lucide="brush"></i>
+        رسم
+    </button>
+
+    <button class="tool"
+            onclick="showPanel('shapes', this)">
+        <i data-lucide="shapes"></i>
+        أشكال
+    </button>
+
+    <button class="tool"
+            onclick="showPanel('filters', this)">
+        <i data-lucide="sparkles"></i>
+        فلاتر
+    </button>
+
+    <button class="tool"
+            onclick="showPanel('stickers', this)">
+        <i data-lucide="smile"></i>
+        ملصقات
+    </button>
+
+    <button class="tool"
+            onclick="openPro()">
+        <i data-lucide="crown"></i>
+        PRO
+    </button>
+
+</nav>
+
+
+<!-- =======================================================
+     WORKSPACE
+======================================================= -->
+
+<main class="workspace">
+
+    <div class="empty" id="emptyState">
+
+        <i data-lucide="image"></i>
+
+        <h2>ابدأ مشروعك</h2>
+
+        <p>
+            ارفع صورة للبدء في تعديلها
+        </p>
+
+    </div>
+
+    <div class="canvas-area">
+
+        <canvas id="canvas"></canvas>
+
+    </div>
+
+
+    <!-- QUICK BAR -->
+
+    <div class="quick">
+
+        <button onclick="undo()" title="تراجع">
+            <i data-lucide="undo-2"></i>
+        </button>
+
+        <button onclick="redo()" title="إعادة">
+            <i data-lucide="redo-2"></i>
+        </button>
+
+        <button onclick="zoom(-0.1)" title="تصغير">
+            <i data-lucide="zoom-out"></i>
+        </button>
+
+        <button onclick="zoom(0.1)" title="تكبير">
+            <i data-lucide="zoom-in"></i>
+        </button>
+
+        <button onclick="deleteSelected()" title="حذف">
+            <i data-lucide="trash-2"></i>
+        </button>
+
+    </div>
+
+</main>
+
+
+<!-- =======================================================
+     RIGHT PANEL
+======================================================= -->
+
+<aside class="panel">
+
+
+<!-- ADJUST -->
+
+<section id="panel-adjust" class="panel-section active">
+
+    <h2 class="panel-title">
+        تحسين الصورة
+    </h2>
+
+    <div class="control">
+
+        <label>
+            السطوع
+            <span class="value" id="brightnessValue">0</span>
+        </label>
+
+        <input
+            type="range"
+            id="brightness"
+            min="-1"
+            max="1"
+            step=".05"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="control">
+
+        <label>
+            التباين
+            <span class="value" id="contrastValue">0</span>
+        </label>
+
+        <input
+            type="range"
+            id="contrast"
+            min="-1"
+            max="1"
+            step=".05"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="control">
+
+        <label>
+            التشبع
+            <span class="value" id="saturationValue">0</span>
+        </label>
+
+        <input
+            type="range"
+            id="saturation"
+            min="-1"
+            max="1"
+            step=".05"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="control">
+
+        <label>
+            الضبابية
+            <span class="value" id="blurValue">0</span>
+        </label>
+
+        <input
+            type="range"
+            id="blur"
+            min="0"
+            max=".5"
+            step=".01"
+            value="0"
+        >
+
+    </div>
+
+
+    <button class="action"
+            onclick="grayscale()">
+
+        <i data-lucide="circle"></i>
+
+        أبيض وأسود
+
+    </button>
+
+
+    <button class="action"
+            onclick="resetFilters()">
+
+        <i data-lucide="rotate-ccw"></i>
+
+        إعادة التعديلات
+
+    </button>
+
+</section>
+
+
+<!-- TRANSFORM -->
+
+<section id="panel-transform" class="panel-section">
+
+    <h2 class="panel-title">
+        التحويل والقص
+    </h2>
+
+    <button class="action"
+            onclick="rotate(-90)">
+        ↶ تدوير يسار
+    </button>
+
+    <button class="action"
+            onclick="rotate(90)">
+        ↷ تدوير يمين
+    </button>
+
+    <button class="action"
+            onclick="flipX()">
+        ⇆ قلب أفقي
+    </button>
+
+    <button class="action"
+            onclick="flipY()">
+        ⇅ قلب رأسي
+    </button>
+
+    <hr style="border-color:#263143;margin:15px 0">
+
+    <div class="control">
+
+        <label>عرض الصورة</label>
+
+        <input
+            type="number"
+            id="resizeWidth"
+            placeholder="مثلاً 1920"
+        >
+
+    </div>
+
+    <div class="control">
+
+        <label>ارتفاع الصورة</label>
+
+        <input
+            type="number"
+            id="resizeHeight"
+            placeholder="مثلاً 1080"
+        >
+
+    </div>
+
+    <button class="action primary"
+            onclick="resizeCanvas()">
+
+        تغيير المقاس
+
+    </button>
+
+    <button class="action pro"
+            onclick="proFeature('أداة القص المتقدمة')">
+
+        ✂️ القص الاحترافي PRO
+
+    </button>
+
+</section>
+
+
+<!-- TEXT -->
+
+<section id="panel-text" class="panel-section">
+
+    <h2 class="panel-title">
+        إضافة نص
+    </h2>
+
+    <div class="control">
+
+        <label>النص</label>
+
+        <input
+            type="text"
+            id="textInput"
+            placeholder="اكتب النص هنا"
+        >
+
+    </div>
+
+    <div class="control">
+
+        <label>حجم الخط</label>
+
+        <input
+            type="number"
+            id="fontSize"
+            value="40"
+            min="8"
+            max="200"
+        >
+
+    </div>
+
+    <div class="control">
+
+        <label>لون النص</label>
+
+        <input
+            type="color"
+            id="textColor"
+            value="#ffffff"
+        >
+
+    </div>
+
+    <div class="control">
+
+        <label>نوع الخط</label>
+
+        <select id="fontFamily">
+
+            <option value="Arial">Arial</option>
+            <option value="Tahoma">Tahoma</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Courier New">Courier New</option>
+
+        </select>
+
+    </div>
+
+    <button class="action primary"
+            onclick="addText()">
+
+        <i data-lucide="plus"></i>
+
+        إضافة النص
+
+    </button>
+
+</section>
+
+
+<!-- DRAW -->
+
+<section id="panel-draw" class="panel-section">
+
+    <h2 class="panel-title">
+        الرسم
+    </h2>
+
+    <button class="action primary"
+            onclick="toggleDrawing()">
+
+        🖌️ تشغيل / إيقاف الفرشاة
+
+    </button>
+
+    <div class="control">
+
+        <label>لون الفرشاة</label>
+
+        <input
+            type="color"
+            id="brushColor"
+            value="#ff0000"
+        >
+
+    </div>
+
+    <div class="control">
+
+        <label>حجم الفرشاة</label>
+
+        <input
+            type="range"
+            id="brushSize"
+            min="1"
+            max="50"
+            value="5"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- SHAPES -->
+
+<section id="panel-shapes" class="panel-section">
+
+    <h2 class="panel-title">
+        الأشكال
+    </h2>
+
+    <button class="action"
+            onclick="addRectangle()">
+
+        ▰ مستطيل
+
+    </button>
+
+    <button class="action"
+            onclick="addCircle()">
+
+        ● دائرة
+
+    </button>
+
+    <button class="action"
+            onclick="addTriangle()">
+
+        ▲ مثلث
+
+    </button>
+
+</section>
+
+
+<!-- FILTERS -->
+
+<section id="panel-filters" class="panel-section">
+
+    <h2 class="panel-title">
+        الفلاتر
+    </h2>
+
+    <button class="action"
+            onclick="filterPreset('vintage')">
+
+        Vintage
+
+    </button>
+
+    <button class="action"
+            onclick="filterPreset('cool')">
+
+        Cool
+
+    </button>
+
+    <button class="action"
+            onclick="filterPreset('dramatic')">
+
+        Dramatic
+
+    </button>
+
+    <button class="action"
+            onclick="filterPreset('mono')">
+
+        Monochrome
+
+    </button>
+
+    <button class="action pro"
+            onclick="proFeature('فلاتر الذكاء الاصطناعي')">
+
+        ✨ AI Filters PRO
+
+    </button>
+
+</section>
+
+
+<!-- STICKERS -->
+
+<section id="panel-stickers" class="panel-section">
+
+    <h2 class="panel-title">
+        الملصقات
+    </h2>
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:8px;
+    ">
+
+        <button class="action"
+                onclick="addSticker('😀')">😀</button>
+
+        <button class="action"
+                onclick="addSticker('🔥')">🔥</button>
+
+        <button class="action"
+                onclick="addSticker('❤️')">❤️</button>
+
+        <button class="action"
+                onclick="addSticker('⭐')">⭐</button>
+
+        <button class="action"
+                onclick="addSticker('😂')">😂</button>
+
+        <button class="action"
+                onclick="addSticker('😎')">😎</button>
+
+        <button class="action"
+                onclick="addSticker('🎮')">🎮</button>
+
+        <button class="action"
+                onclick="addSticker('💥')">💥</button>
+
+    </div>
+
+    <button class="action pro"
+            style="margin-top:12px"
+            onclick="proFeature('مكتبة الملصقات PRO')">
+
+        👑 ملصقات PRO
+
+    </button>
+
+</section>
+
+</aside>
+
+</div>
+
+
+<!-- =======================================================
+     FILE INPUT
+======================================================= -->
+
+<input
+    type="file"
+    id="file"
+    accept="image/*"
+    hidden
+>
+
+
+<!-- =======================================================
+     PRO MODAL
+======================================================= -->
+
+<div class="modal" id="proModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>
+                👑 Image Editor PRO
+            </h2>
+
+            <button class="close"
+                    onclick="closePro()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <p style="color:#94a3b8">
+
+            افتح جميع الأدوات الاحترافية
+            والتصدير بجودة عالية.
+
+        </p>
+
+
+        <div class="pricing">
+
+            <div class="price-card selected"
+                 onclick="selectPlan(this)">
+
+                <h3>شهري</h3>
+
+                <div class="price">
+                    $9.99
+                </div>
+
+                <div class="features">
+
+                    ✓ جميع الأدوات<br>
+                    ✓ تصدير عالي الجودة<br>
+                    ✓ بدون علامة مائية<br>
+                    ✓ أدوات AI
+
+                </div>
+
+            </div>
+
+
+            <div class="price-card"
+                 onclick="selectPlan(this)">
+
+                <h3>سنوي</h3>
+
+                <div class="price">
+                    $79.99
+                </div>
+
+                <div class="features">
+
+                    ✓ جميع مميزات PRO<br>
+                    ✓ توفير كبير<br>
+                    ✓ أدوات AI<br>
+                    ✓ أولوية الدعم
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="action pro"
+            onclick="startCheckout()">
+
+            ⚡ الاشتراك في PRO
+
+        </button>
+
+        <p style="
+            color:#64748b;
+            font-size:11px;
+            text-align:center;
+            margin-top:10px;
+        ">
+
+            الدفع الحقيقي يتم ربطه لاحقاً
+            مع بوابة دفع آمنة.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   1. INITIALIZATION
+========================================================= */
+
+lucide.createIcons();
+
+const canvas = new fabric.Canvas("canvas", {
+    width: 800,
+    height: 600,
+
+    backgroundColor: "#ffffff",
+
+    preserveObjectStacking: true,
+
+    selection: true
+});
+
+let currentImage = null;
+
+let history = [];
+let historyIndex = -1;
+
+let zoomLevel = 1;
+
+
+/* =========================================================
+   2. HISTORY
+========================================================= */
+
+function saveHistory() {
+
+    const json = canvas.toJSON();
+
+    history = history.slice(0, historyIndex + 1);
+
+    history.push(json);
+
+    historyIndex++;
+
+    if (history.length > 30) {
+
+        history.shift();
+
+        historyIndex--;
+
+    }
+}
+
+function undo() {
+
+    if (historyIndex <= 0) return;
+
+    historyIndex--;
+
+    canvas.loadFromJSON(
+        history[historyIndex],
+        () => canvas.renderAll()
+    );
+}
+
+function redo() {
+
+    if (historyIndex >= history.length - 1) return;
+
+    historyIndex++;
+
+    canvas.loadFromJSON(
+        history[historyIndex],
+        () => canvas.renderAll()
+    );
+}
+
+
+/* =========================================================
+   3. FILE UPLOAD
+========================================================= */
+
+document
+    .getElementById("file")
+    .addEventListener("change", function(e) {
+
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+
+            alert("يرجى اختيار صورة صحيحة.");
+
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            fabric.Image.fromURL(
+                event.target.result,
+                function(img) {
+
+                    canvas.clear();
+
+                    currentImage = img;
+
+                    const maxWidth = 1000;
+                    const maxHeight = 700;
+
+                    let scale = Math.min(
+                        maxWidth / img.width,
+                        maxHeight / img.height,
+                        1
+                    );
+
+                    img.scale(scale);
+
+                    img.set({
+                        left:
+                            (canvas.width -
+                            img.getScaledWidth()) / 2,
+
+                        top:
+                            (canvas.height -
+                            img.getScaledHeight()) / 2,
+
+                        selectable: true
+                    });
+
+                    canvas.add(img);
+
+                    canvas.setActiveObject(img);
+
+                    document
+                        .getElementById("emptyState")
+                        .style.display = "none";
+
+                    resetFilters();
+
+                    saveHistory();
+
+                    canvas.renderAll();
+                }
+            );
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+
+/* =========================================================
+   4. PANEL SYSTEM
+========================================================= */
+
+function showPanel(name, button) {
+
+    document
+        .querySelectorAll(".panel-section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+    const target =
+        document.getElementById(
+            "panel-" + name
+        );
+
+    if (target) {
+        target.classList.add("active");
+    }
+
+    document
+        .querySelectorAll(".tool")
+        .forEach(tool => {
+
+            tool.classList.remove("active");
+
+        });
+
+    if (button) {
+        button.classList.add("active");
+    }
+}
+
+
+/* =========================================================
+   5. FILTER SYSTEM
+========================================================= */
+
+function getImage() {
+
+    if (!currentImage) {
+
+        alert("ارفع صورة أولاً.");
+
+        return null;
+    }
+
+    return currentImage;
+}
+
+function updateFilters() {
+
+    const img = getImage();
+
+    if (!img) return;
+
+    const brightness =
+        parseFloat(
+            document.getElementById("brightness").value
+        );
+
+    const contrast =
+        parseFloat(
+            document.getElementById("contrast").value
+        );
+
+    const saturation =
+        parseFloat(
+            document.getElementById("saturation").value
+        );
+
+    const blur =
+        parseFloat(
+            document.getElementById("blur").value
+        );
+
+    img.filters = [];
+
+    if (brightness !== 0) {
+
+        img.filters.push(
+            new fabric.Image.filters.Brightness({
+                brightness
+            })
+        );
+    }
+
+    if (contrast !== 0) {
+
+        img.filters.push(
+            new fabric.Image.filters.Contrast({
+                contrast
+            })
+        );
+    }
+
+    if (saturation !== 0) {
+
+        img.filters.push(
+            new fabric.Image.filters.Saturation({
+                saturation
+            })
+        );
+    }
+
+    if (blur > 0) {
+
+        img.filters.push(
+            new fabric.Image.filters.Blur({
+                blur
+            })
+        );
+    }
+
+    img.applyFilters();
+
+    canvas.renderAll();
+
+    updateValues();
+}
+
+function updateValues() {
+
+    document.getElementById("brightnessValue")
+        .textContent =
+        document.getElementById("brightness").value;
+
+    document.getElementById("contrastValue")
+        .textContent =
+        document.getElementById("contrast").value;
+
+    document.getElementById("saturationValue")
+        .textContent =
+        document.getElementById("saturation").value;
+
+    document.getElementById("blurValue")
+        .textContent =
+        document.getElementById("blur").value;
+}
+
+[
+    "brightness",
+    "contrast",
+    "saturation",
+    "blur"
+].forEach(id => {
+
+    document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            updateFilters
+        );
+
+});
+
+function resetFilters() {
+
+    document.getElementById("brightness").value = 0;
+    document.getElementById("contrast").value = 0;
+    document.getElementById("saturation").value = 0;
+    document.getElementById("blur").value = 0;
+
+    if (currentImage) {
+
+        currentImage.filters = [];
+
+        currentImage.applyFilters();
+
+        canvas.renderAll();
+    }
+
+    updateValues();
+}
+
+function grayscale() {
+
+    const img = getImage();
+
+    if (!img) return;
+
+    img.filters = [
+        new fabric.Image.filters.Grayscale()
+    ];
+
+    img.applyFilters();
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   6. FILTER PRESETS
+========================================================= */
+
+function filterPreset(type) {
+
+    const img = getImage();
+
+    if (!img) return;
+
+    img.filters = [];
+
+    if (type === "vintage") {
+
+        img.filters.push(
+            new fabric.Image.filters.Sepia()
+        );
+
+        img.filters.push(
+            new fabric.Image.filters.Contrast({
+                contrast: .15
+            })
+        );
+    }
+
+    if (type === "cool") {
+
+        img.filters.push(
+            new fabric.Image.filters.Saturation({
+                saturation: .2
+            })
+        );
+
+        img.filters.push(
+            new fabric.Image.filters.Contrast({
+                contrast: .1
+            })
+        );
+    }
+
+    if (type === "dramatic") {
+
+        img.filters.push(
+            new fabric.Image.filters.Contrast({
+                contrast: .4
+            })
+        );
+
+        img.filters.push(
+            new fabric.Image.filters.Saturation({
+                saturation: .15
+            })
+        );
+    }
+
+    if (type === "mono") {
+
+        img.filters.push(
+            new fabric.Image.filters.Grayscale()
+        );
+    }
+
+    img.applyFilters();
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   7. TRANSFORM
+========================================================= */
+
+function rotate(angle) {
+
+    const img = getImage();
+
+    if (!img) return;
+
+    img.rotate(
+        (img.angle || 0) + angle
+    );
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+function flipX() {
+
+    const img = getImage();
+
+    if (!img) return;
+
+    img.set({
+        flipX: !img.flipX
+    });
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+function flipY() {
+
+    const img = getImage();
+
+    if (!img) return;
+
+    img.set({
+        flipY: !img.flipY
+    });
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   8. TEXT
+========================================================= */
+
+function addText() {
+
+    const value =
+        document.getElementById("textInput").value;
+
+    if (!value.trim()) {
+
+        alert("اكتب النص أولاً.");
+
+        return;
+    }
+
+    const text =
+        new fabric.IText(
+            value,
+            {
+                left: 100,
+                top: 100,
+
+                fill:
+                    document.getElementById(
+                        "textColor"
+                    ).value,
+
+                fontSize:
+                    parseInt(
+                        document.getElementById(
+                            "fontSize"
+                        ).value
+                    ),
+
+                fontFamily:
+                    document.getElementById(
+                        "fontFamily"
+                    ).value,
+
+                fontWeight: "normal",
+
+                textAlign: "center"
+            }
+        );
+
+    canvas.add(text);
+
+    canvas.setActiveObject(text);
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   9. SHAPES
+========================================================= */
+
+function addRectangle() {
+
+    const rect =
+        new fabric.Rect({
+
+            left: 150,
+            top: 150,
+
+            width: 180,
+            height: 100,
+
+            fill: "#38bdf8",
+
+            rx: 8,
+            ry: 8
+        });
+
+    canvas.add(rect);
+
+    canvas.setActiveObject(rect);
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+function addCircle() {
+
+    const circle =
+        new fabric.Circle({
+
+            left: 200,
+            top: 150,
+
+            radius: 70,
+
+            fill: "#a855f7"
+        });
+
+    canvas.add(circle);
+
+    canvas.setActiveObject(circle);
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+function addTriangle() {
+
+    const triangle =
+        new fabric.Triangle({
+
+            left: 250,
+            top: 150,
+
+            width: 150,
+            height: 150,
+
+            fill: "#ec4899"
+        });
+
+    canvas.add(triangle);
+
+    canvas.setActiveObject(triangle);
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   10. STICKERS
+========================================================= */
+
+function addSticker(symbol) {
+
+    const sticker =
+        new fabric.Textbox(
+            symbol,
+            {
+                left: 200,
+                top: 200,
+
+                fontSize: 70,
+
+                width: 100,
+
+                textAlign: "center"
+            }
+        );
+
+    canvas.add(sticker);
+
+    canvas.setActiveObject(sticker);
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   11. DRAWING
+========================================================= */
+
+function toggleDrawing() {
+
+    canvas.isDrawingMode =
+        !canvas.isDrawingMode;
+
+    if (canvas.isDrawingMode) {
+
+        canvas.freeDrawingBrush.color =
+            document.getElementById(
+                "brushColor"
+            ).value;
+
+        canvas.freeDrawingBrush.width =
+            parseInt(
+                document.getElementById(
+                    "brushSize"
+                ).value
+            );
+    }
+}
+
+document
+    .getElementById("brushColor")
+    .addEventListener("input", function() {
+
+        canvas.freeDrawingBrush.color =
+            this.value;
+
+    });
+
+document
+    .getElementById("brushSize")
+    .addEventListener("input", function() {
+
+        canvas.freeDrawingBrush.width =
+            parseInt(this.value);
+
+    });
+
+
+/* =========================================================
+   12. DELETE
+========================================================= */
+
+function deleteSelected() {
+
+    const active =
+        canvas.getActiveObjects();
+
+    if (!active.length) return;
+
+    active.forEach(obj =>
+        canvas.remove(obj)
+    );
+
+    canvas.discardActiveObject();
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   13. ZOOM
+========================================================= */
+
+function zoom(amount) {
+
+    zoomLevel += amount;
+
+    zoomLevel =
+        Math.max(
+            .3,
+            Math.min(
+                3,
+                zoomLevel
+            )
+        );
+
+    canvas.setZoom(zoomLevel);
+
+    canvas.renderAll();
+}
+
+
+/* =========================================================
+   14. RESIZE
+========================================================= */
+
+function resizeCanvas() {
+
+    const width =
+        parseInt(
+            document.getElementById(
+                "resizeWidth"
+            ).value
+        );
+
+    const height =
+        parseInt(
+            document.getElementById(
+                "resizeHeight"
+            ).value
+        );
+
+    if (
+        !width ||
+        !height ||
+        width < 100 ||
+        height < 100
+    ) {
+
+        alert(
+            "أدخل عرض وارتفاع صحيحين."
+        );
+
+        return;
+    }
+
+    canvas.setWidth(width);
+    canvas.setHeight(height);
+
+    canvas.renderAll();
+
+    saveHistory();
+}
+
+
+/* =========================================================
+   15. NEW PROJECT
+========================================================= */
+
+function newProject() {
+
+    if (
+        !confirm(
+            "هل تريد إنشاء مشروع جديد؟"
+        )
+    ) return;
+
+    canvas.clear();
+
+    canvas.backgroundColor = "#ffffff";
+
+    currentImage = null;
+
+    document
+        .getElementById("emptyState")
+        .style.display = "block";
+
+    resetFilters();
+
+    saveHistory();
+
+    canvas.renderAll();
+}
+
+
+/* =========================================================
+   16. PRO SYSTEM
+========================================================= */
+
+function openPro() {
+
+    document
+        .getElementById("proModal")
+        .classList.add("show");
+}
+
+function closePro() {
+
+    document
+        .getElementById("proModal")
+        .classList.remove("show");
+}
+
+function proFeature(name) {
+
+    alert(
+        "🔒 " +
+        name +
+        "\n\nهذه الميزة متاحة في نسخة PRO."
+    );
+
+    openPro();
+}
+
+function selectPlan(card) {
+
+    document
+        .querySelectorAll(".price-card")
+        .forEach(c =>
+            c.classList.remove(
+                "selected"
+            )
+        );
+
+    card.classList.add("selected");
+}
+
+function startCheckout() {
+
+    /*
+       مهم:
+
+       لا تضع مفاتيح Stripe السرية هنا.
+
+       في النسخة الحقيقية:
+
+       Browser
+          ↓
+       Backend
+          ↓
+       Stripe Checkout
+          ↓
+       Webhook
+          ↓
+       Database
+          ↓
+       PRO account
+    */
+
+    alert(
+        "واجهة الدفع جاهزة للربط.\n\n" +
+        "الخطوة التالية هي إنشاء Backend " +
+        "وربط Stripe Checkout."
+    );
+}
+
+
+/* =========================================================
+   17. EXPORT
+========================================================= */
+
+function exportImage(format = "png") {
+
+    if (!currentImage) {
+
+        alert("ارفع صورة أولاً.");
+
+        return;
+    }
+
+    canvas.discardActiveObject();
+
+    canvas.renderAll();
+
+    const dataURL =
+        canvas.toDataURL({
+            format:
+                format === "jpg"
+                    ? "jpeg"
+                    : "png",
+
+            quality: 1
+        });
+
+    const link =
+        document.createElement("a");
+
+    link.download =
+        "image-editor-" +
+        Date.now() +
+        "." +
+        (format === "jpg"
+            ? "jpg"
+            : "png");
+
+    link.href = dataURL;
+
+    link.click();
+}
+
+
+/* =========================================================
+   18. KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e) {
+
+        if (
+            (e.ctrlKey || e.metaKey) &&
+            e.key.toLowerCase() === "z"
+        ) {
+
+            e.preventDefault();
+
+            undo();
+        }
+
+        if (
+            (e.ctrlKey || e.metaKey) &&
+            e.key.toLowerCase() === "y"
+        ) {
+
+            e.preventDefault();
+
+            redo();
+        }
+
+        if (
+            e.key === "Delete" ||
+            e.key === "Backspace"
+        ) {
+
+            deleteSelected();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   19. CANVAS EVENTS
+========================================================= */
+
+canvas.on(
+    "object:added",
+    function(e) {
+
+        if (!e.target.__history) {
+
+            e.target.__history = true;
+        }
+
+    }
+);
+
+canvas.on(
+    "path:created",
+    function() {
+
+        saveHistory();
+
+    }
+);
+
+
+/* =========================================================
+   20. INITIAL STATE
+========================================================= */
+
+canvas.backgroundColor = "#ffffff";
+
+saveHistory();
+
+updateValues();
+
+</script>
+
+</body>
+</html>
