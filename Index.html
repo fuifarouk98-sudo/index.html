@@ -1,0 +1,2686 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>IMAGE EDITOR | محرر الصور والفيديو</title>
+
+
+<style>
+
+/* =====================================================
+   GENERAL
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+
+    background:
+
+    radial-gradient(
+        circle at 10% 10%,
+        rgba(139,61,255,.25),
+        transparent 30%
+    ),
+
+    radial-gradient(
+        circle at 90% 20%,
+        rgba(20,224,255,.18),
+        transparent 30%
+    ),
+
+    radial-gradient(
+        circle at 50% 100%,
+        rgba(255,43,190,.18),
+        transparent 35%
+    ),
+
+    #060817;
+
+    color:white;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+}
+
+
+:root{
+
+    --purple:#8d42ff;
+
+    --pink:#ff3ec8;
+
+    --cyan:#22e5ff;
+
+    --blue:#4b8dff;
+
+    --panel:#10152f;
+
+    --panel2:#171d40;
+
+    --text:#ffffff;
+
+    --muted:#aeb4d4;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+    height:78px;
+
+    width:100%;
+
+    padding:
+    0 6%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    background:
+    rgba(5,7,22,.72);
+
+    backdrop-filter:
+    blur(20px);
+
+    border-bottom:
+    1px solid
+    rgba(255,255,255,.08);
+}
+
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+
+.logo-icon{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:25px;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        var(--purple),
+        var(--pink),
+        var(--cyan)
+    );
+
+    box-shadow:
+    0 0 25px
+    rgba(150,60,255,.55);
+}
+
+
+.logo span{
+
+    background:
+
+    linear-gradient(
+        90deg,
+        white,
+        #9feaff,
+        #e58cff
+    );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+}
+
+
+.nav-links{
+
+    display:flex;
+
+    gap:28px;
+
+    list-style:none;
+}
+
+
+.nav-links a{
+
+    color:#c8cbe3;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+    font-size:15px;
+}
+
+
+.nav-links a:hover{
+
+    color:white;
+
+    text-shadow:
+    0 0 15px
+    var(--cyan);
+}
+
+
+.nav-pro{
+
+    color:#ff9cff !important;
+
+    font-weight:bold;
+}
+
+
+.login{
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:
+    10px 20px;
+
+    border:
+    1px solid
+    rgba(255,255,255,.2);
+
+    border-radius:25px;
+
+    transition:.3s;
+}
+
+
+.login:hover{
+
+    background:
+    rgba(255,255,255,.1);
+
+    box-shadow:
+    0 0 20px
+    rgba(130,70,255,.25);
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    max-width:1250px;
+
+    margin:auto;
+
+    min-height:650px;
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:60px;
+
+    align-items:center;
+
+    padding:
+    70px 30px;
+}
+
+
+.hero-text h1{
+
+    font-size:
+    clamp(42px,6vw,76px);
+
+    line-height:1.08;
+
+    margin-bottom:25px;
+}
+
+
+.gradient-text{
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #ffffff,
+        #7eeaff,
+        #a35cff,
+        #ff49cb
+    );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+}
+
+
+.hero-text p{
+
+    color:var(--muted);
+
+    font-size:18px;
+
+    line-height:2;
+
+    max-width:600px;
+
+    margin-bottom:35px;
+}
+
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+}
+
+
+.btn{
+
+    border:none;
+
+    padding:
+    15px 30px;
+
+    border-radius:15px;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+
+.primary{
+
+    background:
+
+    linear-gradient(
+        90deg,
+        var(--purple),
+        var(--pink)
+    );
+
+    box-shadow:
+    0 0 30px
+    rgba(168,54,255,.35);
+}
+
+
+.primary:hover{
+
+    transform:
+    translateY(-3px);
+
+    box-shadow:
+    0 0 40px
+    rgba(168,54,255,.65);
+}
+
+
+.secondary{
+
+    background:
+    rgba(255,255,255,.06);
+
+    border:
+    1px solid
+    rgba(255,255,255,.14);
+}
+
+
+.secondary:hover{
+
+    background:
+    rgba(255,255,255,.12);
+}
+
+
+/* =====================================================
+   HERO LOGO
+===================================================== */
+
+.hero-visual{
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+
+.glow{
+
+    position:absolute;
+
+    width:430px;
+
+    height:430px;
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(
+        circle,
+        rgba(109,55,255,.35),
+        rgba(0,220,255,.12),
+        transparent 70%
+    );
+
+    filter:blur(10px);
+}
+
+
+.logo-card{
+
+    width:
+    min(440px,90vw);
+
+    aspect-ratio:1;
+
+    border-radius:50%;
+
+    padding:12px;
+
+    position:relative;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #ffb082,
+        #ff55cb,
+        #48e8ff,
+        #8b55ff
+    );
+
+    box-shadow:
+
+    0 0 25px
+    rgba(255,78,202,.4),
+
+    0 0 80px
+    rgba(70,194,255,.25);
+
+    animation:
+    floating 5s ease-in-out infinite;
+}
+
+
+.logo-inner{
+
+    width:100%;
+
+    height:100%;
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(
+        circle at center,
+        #263a72 0%,
+        #101941 48%,
+        #080d29 100%
+    );
+
+    border:
+    3px solid
+    #18265b;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+
+.logo-inner::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:72%;
+
+    height:72%;
+
+    border-radius:50%;
+
+    border:
+    3px solid
+    rgba(70,223,255,.35);
+
+    box-shadow:
+
+    0 0 25px
+    rgba(65,230,255,.2),
+
+    inset 0 0 30px
+    rgba(255,49,210,.15);
+}
+
+
+.camera{
+
+    font-size:90px;
+
+    z-index:2;
+
+    filter:
+    drop-shadow(
+        0 0 12px
+        rgba(255,255,255,.4)
+    );
+}
+
+
+.logo-title{
+
+    z-index:3;
+
+    margin-top:15px;
+
+    font-size:32px;
+
+    font-weight:900;
+
+    letter-spacing:2px;
+}
+
+
+.logo-sub{
+
+    z-index:3;
+
+    margin-top:10px;
+
+    font-size:14px;
+
+    color:#e4e8ff;
+}
+
+
+@keyframes floating{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+}
+
+
+/* =====================================================
+   FLOATING TOOLS
+===================================================== */
+
+.float-tool{
+
+    position:absolute;
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:16px;
+
+    background:
+    rgba(13,18,47,.9);
+
+    border:
+    1px solid
+    rgba(255,255,255,.15);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:25px;
+
+    box-shadow:
+    0 0 25px
+    rgba(77,80,255,.2);
+
+    backdrop-filter:
+    blur(10px);
+}
+
+
+.t1{
+    top:5%;
+    right:5%;
+}
+
+.t2{
+    top:30%;
+    left:0;
+}
+
+.t3{
+    bottom:20%;
+    right:0;
+}
+
+.t4{
+    bottom:5%;
+    left:10%;
+}
+
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:40px;
+}
+
+
+.section-title h2{
+
+    font-size:38px;
+
+    margin-bottom:12px;
+}
+
+
+.section-title p{
+
+    color:var(--muted);
+}
+
+
+/* =====================================================
+   EDITOR
+===================================================== */
+
+.editor-section{
+
+    max-width:1250px;
+
+    margin:auto;
+
+    padding:
+    50px 30px
+    80px;
+}
+
+
+.editor{
+
+    background:
+    rgba(12,17,43,.8);
+
+    border:
+    1px solid
+    rgba(255,255,255,.1);
+
+    border-radius:25px;
+
+    padding:20px;
+
+    box-shadow:
+    0 25px 80px
+    rgba(0,0,0,.35);
+
+    backdrop-filter:
+    blur(20px);
+}
+
+
+.toolbar{
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:20px;
+}
+
+
+.tool{
+
+    background:#171d40;
+
+    border:
+    1px solid
+    rgba(255,255,255,.08);
+
+    color:white;
+
+    padding:
+    11px 17px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+
+.tool:hover,
+.tool.active{
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #713cff,
+        #dc36ba
+    );
+
+    box-shadow:
+    0 0 18px
+    rgba(131,50,255,.35);
+}
+
+
+.canvas-area{
+
+    min-height:400px;
+
+    border-radius:20px;
+
+    background:
+
+    linear-gradient(
+        45deg,
+        #151a38 25%,
+        transparent 25%
+    ),
+
+    linear-gradient(
+        -45deg,
+        #151a38 25%,
+        transparent 25%
+    ),
+
+    linear-gradient(
+        45deg,
+        transparent 75%,
+        #151a38 75%
+    ),
+
+    linear-gradient(
+        -45deg,
+        transparent 75%,
+        #151a38 75%
+    );
+
+    background-size:40px 40px;
+
+    background-position:
+    0 0,
+    0 20px,
+    20px -20px,
+    -20px 0;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+}
+
+
+#preview{
+
+    max-width:90%;
+
+    max-height:500px;
+
+    display:none;
+
+    border-radius:10px;
+
+    box-shadow:
+    0 15px 50px
+    rgba(0,0,0,.5);
+}
+
+
+.upload-box{
+
+    text-align:center;
+
+    padding:50px;
+}
+
+
+.upload-icon{
+
+    font-size:65px;
+
+    margin-bottom:15px;
+}
+
+
+.upload-box h3{
+
+    font-size:25px;
+
+    margin-bottom:10px;
+}
+
+
+.upload-box p{
+
+    color:#8f96bb;
+
+    margin-bottom:25px;
+}
+
+
+/* =====================================================
+   FEATURES
+===================================================== */
+
+.features{
+
+    max-width:1250px;
+
+    margin:auto;
+
+    padding:
+    30px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+
+.feature{
+
+    padding:30px;
+
+    border-radius:20px;
+
+    background:
+    rgba(17,23,53,.7);
+
+    border:
+    1px solid
+    rgba(255,255,255,.08);
+
+    transition:.3s;
+}
+
+
+.feature:hover{
+
+    transform:
+    translateY(-6px);
+
+    border-color:
+    rgba(95,207,255,.4);
+
+    box-shadow:
+    0 20px 40px
+    rgba(0,0,0,.25);
+}
+
+
+.feature-icon{
+
+    font-size:38px;
+
+    margin-bottom:15px;
+}
+
+
+.feature h3{
+
+    margin-bottom:10px;
+}
+
+
+.feature p{
+
+    color:#9fa6c7;
+
+    line-height:1.8;
+}
+
+
+/* =====================================================
+   PRO PRICING
+===================================================== */
+
+.pricing-section{
+
+    max-width:1250px;
+
+    margin:auto;
+
+    padding:
+    100px 30px;
+}
+
+
+.pro-badge{
+
+    display:inline-block;
+
+    padding:
+    8px 18px;
+
+    border-radius:30px;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        rgba(143,58,255,.2),
+        rgba(255,57,200,.2)
+    );
+
+    border:
+    1px solid
+    rgba(190,90,255,.4);
+
+    color:#e89cff;
+
+    margin-bottom:15px;
+
+    box-shadow:
+    0 0 25px
+    rgba(168,50,255,.2);
+}
+
+
+.pricing-container{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:25px;
+
+    margin-top:45px;
+}
+
+
+.price-card{
+
+    position:relative;
+
+    padding:
+    35px 28px;
+
+    border-radius:25px;
+
+    background:
+
+    linear-gradient(
+        145deg,
+        rgba(25,31,69,.9),
+        rgba(10,14,38,.95)
+    );
+
+    border:
+    1px solid
+    rgba(255,255,255,.1);
+
+    box-shadow:
+    0 25px 70px
+    rgba(0,0,0,.3);
+
+    transition:.35s;
+}
+
+
+.price-card:hover{
+
+    transform:
+    translateY(-10px);
+
+    border-color:
+    rgba(110,220,255,.45);
+
+    box-shadow:
+    0 25px 80px
+    rgba(91,54,255,.25);
+}
+
+
+.price-card.popular{
+
+    border:
+    1px solid
+    rgba(192,77,255,.7);
+
+    box-shadow:
+    0 0 40px
+    rgba(174,57,255,.18);
+}
+
+
+.price-card.lifetime{
+
+    border-color:
+    rgba(255,180,65,.4);
+}
+
+
+.popular-label{
+
+    position:absolute;
+
+    top:-15px;
+
+    right:25px;
+
+    padding:
+    7px 15px;
+
+    border-radius:20px;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #713cff,
+        #ec36ba
+    );
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    box-shadow:
+    0 0 25px
+    rgba(170,50,255,.45);
+}
+
+
+.price-icon{
+
+    font-size:42px;
+
+    margin-bottom:18px;
+}
+
+
+.price-card h3{
+
+    font-size:25px;
+
+    margin-bottom:15px;
+}
+
+
+.price{
+
+    display:flex;
+
+    align-items:end;
+
+    gap:7px;
+}
+
+
+.price strong{
+
+    font-size:42px;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        white,
+        #75eaff,
+        #cf6cff
+    );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+}
+
+
+.price span{
+
+    color:#9ca4c8;
+
+    padding-bottom:8px;
+}
+
+
+.saving{
+
+    color:#54e7b1;
+
+    font-size:14px;
+
+    margin-top:8px;
+}
+
+
+.line{
+
+    height:1px;
+
+    background:
+    rgba(255,255,255,.1);
+
+    margin:
+    25px 0;
+}
+
+
+.price-card ul{
+
+    list-style:none;
+
+    margin-bottom:30px;
+}
+
+
+.price-card li{
+
+    color:#bfc5df;
+
+    padding:9px 0;
+
+    font-size:15px;
+}
+
+
+.subscribe-btn{
+
+    width:100%;
+
+    border:0;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #713cff,
+        #dc36ba
+    );
+
+    box-shadow:
+    0 0 25px
+    rgba(145,53,255,.25);
+
+    transition:.3s;
+}
+
+
+.subscribe-btn:hover{
+
+    transform:
+    scale(1.03);
+
+    box-shadow:
+    0 0 35px
+    rgba(145,53,255,.5);
+}
+
+
+.lifetime .subscribe-btn{
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #ff9d3c,
+        #ff3dbd
+    );
+}
+
+
+/* =====================================================
+   PAYMENT MODAL
+===================================================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(2,4,15,.82);
+
+    backdrop-filter:
+    blur(12px);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:5000;
+
+    padding:20px;
+}
+
+
+.modal.show{
+
+    display:flex;
+}
+
+
+.modal-box{
+
+    width:
+    min(480px,100%);
+
+    background:
+
+    linear-gradient(
+        145deg,
+        #171d42,
+        #080d25
+    );
+
+    border:
+    1px solid
+    rgba(255,255,255,.14);
+
+    border-radius:25px;
+
+    padding:35px;
+
+    text-align:center;
+
+    position:relative;
+
+    box-shadow:
+    0 30px 100px
+    rgba(0,0,0,.6);
+
+    animation:
+    modalIn .3s ease;
+}
+
+
+@keyframes modalIn{
+
+    from{
+        opacity:0;
+        transform:scale(.9);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+
+.close-modal{
+
+    position:absolute;
+
+    top:15px;
+
+    left:15px;
+
+    width:38px;
+
+    height:38px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.08);
+
+    color:white;
+
+    font-size:25px;
+
+    cursor:pointer;
+}
+
+
+.modal-icon{
+
+    font-size:55px;
+
+    margin-bottom:15px;
+}
+
+
+.modal-box h2{
+
+    font-size:25px;
+
+    margin-bottom:12px;
+}
+
+
+.modal-box > p{
+
+    color:#aeb5d3;
+
+    line-height:1.8;
+}
+
+
+.payment-info{
+
+    margin:
+    25px 0;
+
+    background:
+    rgba(255,255,255,.05);
+
+    border-radius:15px;
+
+    padding:18px;
+}
+
+
+.payment-info div{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:10px 0;
+
+    border-bottom:
+    1px solid
+    rgba(255,255,255,.07);
+}
+
+
+.payment-info div:last-child{
+
+    border-bottom:0;
+}
+
+
+.payment-info span{
+
+    color:#969dbc;
+}
+
+
+.payment-info strong{
+
+    color:white;
+}
+
+
+.payment-btn{
+
+    width:100%;
+
+    padding:16px;
+
+    border:0;
+
+    border-radius:15px;
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #713cff,
+        #e438bc
+    );
+
+    box-shadow:
+    0 0 30px
+    rgba(135,50,255,.3);
+}
+
+
+.modal-box small{
+
+    display:block;
+
+    margin-top:15px;
+
+    color:#747c9e;
+
+    line-height:1.7;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+
+    text-align:center;
+
+    padding:
+    40px 20px;
+
+    color:#7e85a7;
+
+    border-top:
+    1px solid
+    rgba(255,255,255,.08);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:900px){
+
+    .nav-links{
+        display:none;
+    }
+
+
+    .navbar{
+
+        padding:
+        0 20px;
+    }
+
+
+    .hero{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+
+        padding-top:50px;
+    }
+
+
+    .hero-text p{
+
+        margin-left:auto;
+
+        margin-right:auto;
+    }
+
+
+    .buttons{
+
+        justify-content:center;
+    }
+
+
+    .hero-visual{
+
+        order:-1;
+    }
+
+
+    .logo-card{
+
+        width:320px;
+    }
+
+
+    .camera{
+
+        font-size:70px;
+    }
+
+
+    .logo-title{
+
+        font-size:25px;
+    }
+
+
+    .features{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .pricing-container{
+
+        grid-template-columns:1fr;
+
+        max-width:500px;
+
+        margin-left:auto;
+
+        margin-right:auto;
+    }
+
+}
+
+
+@media(max-width:500px){
+
+    .logo span{
+
+        font-size:16px;
+    }
+
+
+    .login{
+
+        padding:
+        8px 14px;
+
+        font-size:13px;
+    }
+
+
+    .hero{
+
+        padding:
+        40px 18px;
+    }
+
+
+    .hero-text h1{
+
+        font-size:42px;
+    }
+
+
+    .hero-text p{
+
+        font-size:16px;
+    }
+
+
+    .logo-card{
+
+        width:280px;
+    }
+
+
+    .toolbar{
+
+        justify-content:center;
+    }
+
+
+    .tool{
+
+        font-size:13px;
+
+        padding:
+        9px 12px;
+    }
+
+
+    .modal-box{
+
+        padding:
+        28px 20px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ✦
+        </div>
+
+        <span>
+            IMAGE EDITOR
+        </span>
+
+    </div>
+
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="#home">
+                الرئيسية
+            </a>
+        </li>
+
+        <li>
+            <a href="#editor">
+                المحرر
+            </a>
+        </li>
+
+        <li>
+            <a href="#pricing"
+               class="nav-pro">
+                ⭐ PRO
+            </a>
+        </li>
+
+        <li>
+            <a href="#features">
+                المميزات
+            </a>
+        </li>
+
+    </ul>
+
+
+    <a
+        href="#pricing"
+        class="login">
+
+        ترقية Pro
+
+    </a>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="home">
+
+
+    <div class="hero-text">
+
+
+        <h1>
+
+            حرّر صورك
+
+            <br>
+
+            <span class="gradient-text">
+                بطريقة احترافية
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            محرر صور وفيديو عصري وسريع يعمل مباشرة
+            من المتصفح. أضف الفلاتر والنصوص والملصقات
+            والتأثيرات واحصل على تصميم احترافي بسهولة.
+
+        </p>
+
+
+        <div class="buttons">
+
+
+            <button
+                class="btn primary"
+                onclick="
+                document
+                .getElementById('fileInput')
+                .click()
+                ">
+
+                🚀 ابدأ تحرير صورة
+
+            </button>
+
+
+            <button
+                class="btn secondary"
+                onclick="
+                document
+                .getElementById('editor')
+                .scrollIntoView()
+                ">
+
+                🎨 فتح المحرر
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LOGO -->
+
+    <div class="hero-visual">
+
+
+        <div class="glow"></div>
+
+
+        <div class="logo-card">
+
+
+            <div class="logo-inner">
+
+
+                <div class="camera">
+                    📷
+                </div>
+
+
+                <div class="logo-title">
+                    IMAGE EDITOR
+                </div>
+
+
+                <div class="logo-sub">
+                    موقع تحرير الصور والفيديو
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="float-tool t1">
+            ✂️
+        </div>
+
+        <div class="float-tool t2">
+            🎨
+        </div>
+
+        <div class="float-tool t3">
+            ✨
+        </div>
+
+        <div class="float-tool t4">
+            🖌️
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     EDITOR
+===================================================== -->
+
+<section
+    class="editor-section"
+    id="editor">
+
+
+    <div class="section-title">
+
+        <h2>
+
+            محرر الصور
+
+            <span class="gradient-text">
+                الاحترافي
+            </span>
+
+        </h2>
+
+
+        <p>
+            ارفع صورتك وابدأ التعديل مباشرة
+        </p>
+
+    </div>
+
+
+
+    <div class="editor">
+
+
+        <div class="toolbar">
+
+
+            <button class="tool active">
+                🖱️ تحديد
+            </button>
+
+
+            <button class="tool">
+                ✂️ قص
+            </button>
+
+
+            <button class="tool">
+                ↪️ تدوير
+            </button>
+
+
+            <button class="tool">
+                ☀️ الإضاءة
+            </button>
+
+
+            <button class="tool">
+                🎨 الألوان
+            </button>
+
+
+            <button class="tool">
+                ✨ الفلاتر
+            </button>
+
+
+            <button class="tool">
+                🔤 النص
+            </button>
+
+
+            <button class="tool">
+                😊 ملصقات
+            </button>
+
+
+            <button class="tool">
+                🖌️ الرسم
+            </button>
+
+
+            <button class="tool">
+                🧹 إزالة الخلفية
+            </button>
+
+
+        </div>
+
+
+
+        <div class="canvas-area">
+
+
+            <div
+                class="upload-box"
+                id="uploadBox">
+
+
+                <div class="upload-icon">
+                    🖼️
+                </div>
+
+
+                <h3>
+                    ارفع صورة للبدء
+                </h3>
+
+
+                <p>
+                    PNG • JPG • WEBP
+                </p>
+
+
+                <button
+                    class="btn primary"
+                    onclick="
+                    document
+                    .getElementById('fileInput')
+                    .click()
+                    ">
+
+                    اختيار صورة
+
+                </button>
+
+
+            </div>
+
+
+            <img
+                id="preview"
+                alt="الصورة">
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section
+    class="features"
+    id="features">
+
+
+    <div class="feature">
+
+
+        <div class="feature-icon">
+            ⚡
+        </div>
+
+
+        <h3>
+            سريع جدًا
+        </h3>
+
+
+        <p>
+            تعديل الصور مباشرة داخل المتصفح بدون
+            الحاجة إلى برامج ضخمة.
+        </p>
+
+
+    </div>
+
+
+
+    <div class="feature">
+
+
+        <div class="feature-icon">
+            🎨
+        </div>
+
+
+        <h3>
+            أدوات احترافية
+        </h3>
+
+
+        <p>
+            فلاتر وألوان ونصوص وملصقات وتأثيرات
+            وأدوات قص وتدوير.
+        </p>
+
+
+    </div>
+
+
+
+    <div class="feature">
+
+
+        <div class="feature-icon">
+            📱
+        </div>
+
+
+        <h3>
+            متوافق مع الهاتف
+        </h3>
+
+
+        <p>
+            التصميم متجاوب ويعمل على الهاتف والتابلت
+            والكمبيوتر.
+        </p>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     PRO SUBSCRIPTIONS
+===================================================== -->
+
+<section
+    class="pricing-section"
+    id="pricing">
+
+
+    <div class="section-title">
+
+
+        <div class="pro-badge">
+            ✦ IMAGE EDITOR PRO
+        </div>
+
+
+        <h2>
+
+            اختر اشتراكك
+
+            <span class="gradient-text">
+                Pro
+            </span>
+
+        </h2>
+
+
+        <p>
+            افتح جميع أدوات IMAGE EDITOR الاحترافية
+        </p>
+
+
+    </div>
+
+
+
+    <div class="pricing-container">
+
+
+
+        <!-- =============================================
+             MONTHLY
+        ============================================== -->
+
+        <div class="price-card">
+
+
+            <div class="price-icon">
+                📅
+            </div>
+
+
+            <h3>
+                Pro شهري
+            </h3>
+
+
+            <p class="price">
+
+                <strong>
+                    99
+                </strong>
+
+                <span>
+                    جنيه / شهر
+                </span>
+
+            </p>
+
+
+            <div class="line"></div>
+
+
+            <ul>
+
+                <li>
+                    ✓ جميع أدوات تحرير الصور
+                </li>
+
+                <li>
+                    ✓ الفلاتر الاحترافية
+                </li>
+
+                <li>
+                    ✓ النصوص والملصقات
+                </li>
+
+                <li>
+                    ✓ إزالة الخلفية
+                </li>
+
+                <li>
+                    ✓ تصدير بجودة عالية
+                </li>
+
+                <li>
+                    ✓ بدون إعلانات
+                </li>
+
+            </ul>
+
+
+            <button
+                class="subscribe-btn"
+                onclick="
+                selectPlan(
+                    'Pro شهري',
+                    '99 جنيه / شهر'
+                )
+                ">
+
+                اشترك الآن
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =============================================
+             YEARLY
+        ============================================== -->
+
+        <div class="price-card popular">
+
+
+            <div class="popular-label">
+                ⭐ الأكثر توفيرًا
+            </div>
+
+
+            <div class="price-icon">
+                👑
+            </div>
+
+
+            <h3>
+                Pro سنوي
+            </h3>
+
+
+            <p class="price">
+
+                <strong>
+                    799
+                </strong>
+
+                <span>
+                    جنيه / سنة
+                </span>
+
+            </p>
+
+
+            <p class="saving">
+                💚 وفر أكثر من 30%
+            </p>
+
+
+            <div class="line"></div>
+
+
+            <ul>
+
+                <li>
+                    ✓ جميع مميزات Pro
+                </li>
+
+                <li>
+                    ✓ جميع الأدوات المتقدمة
+                </li>
+
+                <li>
+                    ✓ بدون علامة مائية
+                </li>
+
+                <li>
+                    ✓ تصدير بجودة 4K
+                </li>
+
+                <li>
+                    ✓ معالجة أسرع
+                </li>
+
+                <li>
+                    ✓ بدون إعلانات
+                </li>
+
+            </ul>
+
+
+            <button
+                class="subscribe-btn"
+                onclick="
+                selectPlan(
+                    'Pro سنوي',
+                    '799 جنيه / سنة'
+                )
+                ">
+
+                اشترك الآن
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =============================================
+             LIFETIME
+        ============================================== -->
+
+        <div
+            class="price-card lifetime">
+
+
+            <div class="price-icon">
+                ♾️
+            </div>
+
+
+            <h3>
+                Pro دائم
+            </h3>
+
+
+            <p class="price">
+
+                <strong>
+                    1999
+                </strong>
+
+                <span>
+                    جنيه مرة واحدة
+                </span>
+
+            </p>
+
+
+            <p class="saving">
+                ⭐ استخدام مدى الحياة
+            </p>
+
+
+            <div class="line"></div>
+
+
+            <ul>
+
+                <li>
+                    ✓ جميع مميزات Pro
+                </li>
+
+                <li>
+                    ✓ جميع التحديثات المستقبلية
+                </li>
+
+                <li>
+                    ✓ تصدير 4K
+                </li>
+
+                <li>
+                    ✓ بدون علامة مائية
+                </li>
+
+                <li>
+                    ✓ بدون إعلانات
+                </li>
+
+                <li>
+                    ✓ لا يوجد تجديد
+                </li>
+
+            </ul>
+
+
+            <button
+                class="subscribe-btn"
+                onclick="
+                selectPlan(
+                    'Pro دائم',
+                    '1999 جنيه مرة واحدة'
+                )
+                ">
+
+                شراء Pro الدائم
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PAYMENT MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="subscriptionModal">
+
+
+    <div class="modal-box">
+
+
+        <button
+            class="close-modal"
+            onclick="closeModal()">
+
+            ×
+
+        </button>
+
+
+        <div class="modal-icon">
+            👑
+        </div>
+
+
+        <h2>
+
+            تفعيل
+
+            <span class="gradient-text">
+                IMAGE EDITOR PRO
+            </span>
+
+        </h2>
+
+
+        <p id="selectedPlan">
+            اختر الباقة
+        </p>
+
+
+
+        <div class="payment-info">
+
+
+            <div>
+
+                <span>
+                    الباقة
+                </span>
+
+                <strong id="planName">
+                    ---
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    السعر
+                </span>
+
+                <strong id="planPrice">
+                    ---
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <button
+            class="payment-btn"
+            onclick="startPayment()">
+
+            💳 الانتقال إلى الدفع
+
+        </button>
+
+
+        <small>
+
+            الدفع الحقيقي يحتاج إلى ربط الموقع
+            ببوابة دفع آمنة وخادم Backend.
+
+        </small>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FILE INPUT
+===================================================== -->
+
+<input
+    type="file"
+    id="fileInput"
+    accept="
+        image/png,
+        image/jpeg,
+        image/webp
+    "
+    style="display:none"
+>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <p>
+        © 2026 IMAGE EDITOR — جميع الحقوق محفوظة
+    </p>
+
+</footer>
+
+
+
+<script>
+
+/* =====================================================
+   IMAGE UPLOAD
+===================================================== */
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const preview =
+    document.getElementById("preview");
+
+const uploadBox =
+    document.getElementById("uploadBox");
+
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        const file =
+            this.files[0];
+
+
+        if(!file){
+
+            return;
+
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(e){
+
+                preview.src =
+                    e.target.result;
+
+
+                preview.style.display =
+                    "block";
+
+
+                uploadBox.style.display =
+                    "none";
+
+            };
+
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+
+/* =====================================================
+   EDITOR BUTTONS
+===================================================== */
+
+document
+.querySelectorAll(".tool")
+.forEach(function(button){
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            document
+            .querySelectorAll(".tool")
+            .forEach(function(btn){
+
+                btn.classList
+                .remove("active");
+
+            });
+
+
+            this.classList
+            .add("active");
+
+        }
+    );
+
+});
+
+
+
+/* =====================================================
+   SUBSCRIPTION
+===================================================== */
+
+let selectedPlan = "";
+
+let selectedPrice = "";
+
+
+
+function selectPlan(
+    plan,
+    price
+){
+
+    selectedPlan =
+        plan;
+
+    selectedPrice =
+        price;
+
+
+    document
+    .getElementById("planName")
+    .textContent =
+        plan;
+
+
+    document
+    .getElementById("planPrice")
+    .textContent =
+        price;
+
+
+    document
+    .getElementById("selectedPlan")
+    .textContent =
+        "أنت على وشك الاشتراك في " +
+        plan;
+
+
+    document
+    .getElementById(
+        "subscriptionModal"
+    )
+    .classList
+    .add("show");
+
+}
+
+
+
+function closeModal(){
+
+    document
+    .getElementById(
+        "subscriptionModal"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+function startPayment(){
+
+    alert(
+
+        "الباقة المختارة: " +
+        selectedPlan +
+
+        "\n\nالسعر: " +
+        selectedPrice +
+
+        "\n\nسيتم ربط هذا الزر لاحقًا ببوابة الدفع."
+
+    );
+
+}
+
+
+
+/* =====================================================
+   CLOSE MODAL OUTSIDE
+===================================================== */
+
+document
+.getElementById(
+    "subscriptionModal"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === this
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
